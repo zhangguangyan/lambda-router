@@ -1,22 +1,22 @@
-const api = createApi();
-api.get('/health', (event: any, context: any, params: any) => {
-  console.log('/health');
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ message: 'OK' }),
-  };
-});
-api.get('/health1/:id', (event: any, context: any, params: any) => {
-  console.log('/health1/:id');
-  console.log(params);
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ message: 'OK' }),
-  };
-});
+import { createApi } from "..";
 
-const handler = api.createHandler();
+describe("index", () => {
+    it("should work", () => {
+        const api = createApi();
 
-const method = process.argv[2] || 'GET';
-const path = process.argv[3] || '/health1';
-handler({ httpMethod: method, path }, {});
+        api.get("/test", () => {
+            return {
+                statusCode: 200,
+                body: "test",
+            };
+        });
+        // const actual = api.routes;
+        // console.log(actual);
+        const handler = api.createHandler();
+        const acutal = handler({ httpMethod: "GET", path: "/test" }, {})
+        expect(acutal).toEqual({
+            statusCode: 200,
+            body: "test",
+        });
+    });
+});

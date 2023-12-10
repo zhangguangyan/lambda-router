@@ -1,9 +1,10 @@
 import { match, pathToRegexp } from 'path-to-regexp';
 
 export function createApi() {
-  const routes: Record<string, any> = [];
+  const routes: Record<string, any>[] = [];
 
   const obj: Record<string, any> = {
+    routes,
     createHandler() {
       return (event: any, context: any) => {
         const httpMethod = event.httpMethod;
@@ -15,7 +16,7 @@ export function createApi() {
         if (route) {
           const result = route.match(path);
           result.params = result.params || {};
-          route.cb(event, context, result.params);
+          return route.cb(event, context, result.params);
         }
       };
     },
